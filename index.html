@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Github OAuth Demo</title>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bulma/0.5.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/octicons/4.4.0/font/octicons.min.css">
+  <style>
+    body {
+      text-align: center;
+    }
+
+    #login {
+      margin: 2rem 0;
+    }
+
+    #config {
+      width: 450px;
+      margin: auto;
+      display: block;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+  </style> 
+</head>
+<body>
+  <button class="button" id="login">
+    <i class="octicon octicon-mark-github"></i>&nbsp;
+    登 录
+  </button>
+  <img src="images/config.png" id="config">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    // https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-authorization-options-for-oauth-apps
+    (function() {
+      const scope = 'user'  // 'user, repo, gist'
+      const state = localStorage.getItem('state') || btoa(Date.now())  // An unguessable random string. It is used to protect against cross-site request forgery attacks.
+      const client_id = '309b17796ea18fc9f1d8'
+      const client_secret = '1b6a476a238baf40ebd755faa7ed2ea9d01a6820'
+      const authorize_url = 'http://github.com/login/oauth/authorize'
+      const access_token_url = 'https://github.com/login/oauth/access_token'
+      
+      localStorage.setItem('state', state)
+
+      $('#login').on('click', function() {
+        location.href = `${authorize_url}?${$.param({ scope, state, client_id })}`
+      })
+
+      let code = getUrlParameter('code')
+      if (code && state === getUrlParameter('state')) {
+
+        document.domain = 'github.com'
+
+        $.ajax({
+          url: access_token_url,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            code,
+            client_id,
+            client_secret
+          }
+        }).done(function(data) {
+          // access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&token_type=bearer
+          let token = data.split('&')[0].split('=')[1]
+          console.log('access token', token)
+
+          $.ajax({
+            url: `https://api.github.com/user?access_token=${token}`
+          }).done(function(user) {
+            console.log('user', user)
+            alert(`Hi ${user.name || user.login}`);
+          })
+        })
+      }
+
+      // https://davidwalsh.name/query-string-javascript
+      function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      };
+
+    })();
+  </script>
+</body>
+</html>
