@@ -71,20 +71,20 @@
             url: `https://api.github.com/user?access_token=${token}`
           }).done(function(user) {
             console.log('user', user)
-            alert(`Hi ${user.name || user.login}`);
+            alert(`Hi ${user.name || user.login}`)
           })
         })
       }
 
       // https://davidwalsh.name/query-string-javascript
       function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-      };
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
+        var results = regex.exec(location.search)
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
+      }
 
-    })();
+    })()
   </script>
 </body>
 </html>
