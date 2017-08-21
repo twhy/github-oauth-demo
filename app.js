@@ -14,8 +14,9 @@ app.post('/access_token', function(req, res) {
     form: req.body,
     headers: { Accept: 'application/json' }
   }, function(error, response, body) {
-    if (error) res.json(error)
-    res.json(body)
+    if (error) res.json({ error: error.message })
+
+    res.json(JSON.parse(body))
   })
 })
 

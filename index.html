@@ -13,13 +13,14 @@
     }
 
     #login {
-      margin: 2rem 0;
+      margin: 1.5rem 0 1rem;
     }
 
     #config {
       width: 450px;
       margin: auto;
       display: block;
+      margin-top: 1.5rem;
       border-radius: 4px;
       border: 1px solid #ddd;
     }
@@ -30,6 +31,8 @@
     <i class="octicon octicon-mark-github"></i>&nbsp;
     登 录
   </button>
+  <p id="token"></p>
+  <p id="notice"></p>
   <img src="images/config.png" id="config">
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script>
@@ -64,7 +67,9 @@
 
           if (!token) return
 
-          console.log('access token', token)
+          $('#login').prop('disabled', true)
+          $('#token').html(`Access Token: ${token}`)
+          $('#notice').html(`Try <code>fetch('https://api.github.com/user?access_token=${token}')</code>`)
 
           $.ajax({
             url: `https://api.github.com/user?access_token=${token}`
