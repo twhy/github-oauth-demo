@@ -40,7 +40,6 @@
       const client_id = '309b17796ea18fc9f1d8'
       const client_secret = '1b6a476a238baf40ebd755faa7ed2ea9d01a6820'
       const authorize_url = 'http://github.com/login/oauth/authorize'
-      const access_token_url = 'https://github.com/login/oauth/access_token'
       
       localStorage.setItem('state', state)
 
@@ -51,10 +50,8 @@
       let code = getUrlParameter('code')
       if (code && state === getUrlParameter('state')) {
 
-        document.domain = 'github.com'
-
         $.ajax({
-          url: access_token_url,
+          url: 'https://github-oauth-demo.now.sh/access_token',
           method: 'POST',
           dataType: 'json',
           data: { 
@@ -63,8 +60,10 @@
             client_secret
           }
         }).done(function(data) {
-          // access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&token_type=bearer
-          let token = data.split('&')[0].split('=')[1]
+          let token = data.access_token
+
+          if (!token) return
+
           console.log('access token', token)
 
           $.ajax({

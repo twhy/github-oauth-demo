@@ -1,0 +1,26 @@
+{
+  "name": "github-oauth-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "PORT=80 node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twhy/github-oauth-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/twhy/github-oauth-demo/issues"
+  },
+  "homepage": "https://github.com/twhy/github-oauth-demo#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "request": "^2.81.0"
+  }
+}
